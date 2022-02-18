@@ -11,11 +11,11 @@ using std::cout;
 
 int main()
 {
-	int n, N, rank, k, i; // num of threads, Array size, rank
+	int N, rank, k, i; // num of threads, Array size, rank
 	float Sum = 0;
-	scanf("%d", &n);
+	scanf("%d", &k);
 	scanf("%d", &N);
-	omp_set_num_threads(n);
+	omp_set_num_threads(k);
 #pragma omp parallel shared(rank)
 	{
 		rank = omp_get_thread_num();
@@ -32,14 +32,14 @@ int main()
 	float* Array = new float[N];
 	srand(time(NULL));
 	for (int i = 0; i < N; i++) {
-		Array[i] = (float)rand() / RAND_MAX * (23.0 * 3.0 - 23.0 - 3.0) + (23.0 - 3.0);
+		
+		Array[i] = (double)rand() / RAND_MAX * (23*3 - (23-3)) + (23-3);
 	}
 
 #pragma omp parallel num_threads(2) reduction(+:Sum)
 	{
 		if (omp_get_thread_num() != 1){
-			for (int i = 0; i < N / 2; i++)
-			{
+			for (int i = 0; i < N / 2; i++){
 				Sum += Array[i];
 			}
 		}
@@ -52,6 +52,7 @@ int main()
 	}
 	printf("Sum = %f\n", Sum);
 	cout << "*************************\n";
+	k = 0;
 	scanf("%d", &k);
 	
 	omp_set_num_threads(k);
